@@ -1,0 +1,98 @@
+import * as Device from 'expo-device';
+import { Platform, StyleSheet, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import MojaSlika from '@/Slike/jaz.jpg'
+
+import { AnimatedIcon } from '@/components/animated-icon';
+import { HintRow } from '@/components/hint-row';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { WebBadge } from '@/components/web-badge';
+import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+
+function getDevMenuHint() {
+  if (Platform.OS === 'web') {
+    return <ThemedText type="small">Metleče 47a</ThemedText>;
+  }
+  if (Device.isDevice) {
+    return (
+      <ThemedText type="small">
+        shake device or press <ThemedText type="code">m</ThemedText> in terminal
+      </ThemedText>
+    );
+  }
+  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+  return (
+    <ThemedText type="small">
+      press <ThemedText type="code">{shortcut}</ThemedText>
+    </ThemedText>
+  );
+}
+
+export default function HomeScreen() {
+  return (
+    <ThemedView style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <ThemedView style={styles.herMoSection}>
+		<Image
+		source = {MojaSlika}
+		style = {{width:200, height:200, resizeMode:'contain', marginTop:100, marginLeft:110}}
+		/>
+          <ThemedText type="title" style={styles.title}>
+            Moja spletna&nbsp;stran
+          </ThemedText>
+        </ThemedView>
+    />
+        <ThemedView type="backgroundElement" style={styles.stepContainer}>
+          <HintRow
+            title="Ime:"
+            hint={<ThemedText type="code">Jošt Božičevič</ThemedText>}
+          />
+          <HintRow title="Stanujem:" hint={getDevMenuHint()} />
+          <HintRow
+            title="Opis:"
+            hint={<ThemedText type="code">Ta spletna stran me bo predstavila kot osebo.</ThemedText>}
+          />
+        </ThemedView>
+
+        {Platform.OS === 'web' && <WebBadge />}
+      </SafeAreaView>
+    </ThemedView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  safeArea: {
+    flex: 1,
+    paddingHorizontal: Spacing.four,
+    alignItems: 'center',
+    gap: Spacing.three,
+    paddingBottom: BottomTabInset + Spacing.three,
+    maxWidth: MaxContentWidth,
+  },
+  heroSection: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    paddingHorizontal: Spacing.four,
+    gap: Spacing.four,
+  },
+  title: {
+    textAlign: 'center',
+  },
+  code: {
+    textTransform: 'uppercase',
+  },
+  stepContainer: {
+    gap: Spacing.three,
+    alignSelf: 'stretch',
+    paddingHorizontal: Spacing.three,
+    paddingVertical: Spacing.four,
+    borderRadius: Spacing.four,
+  },
+});
